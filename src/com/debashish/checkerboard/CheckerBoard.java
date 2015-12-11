@@ -9,6 +9,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 public class CheckerBoard extends JFrame {
+	private Color currentColor = Color.RED; //opposite of first button color
+	private boolean skipColorSwitch = false;
+	
 	/**
 	 * The constructor will initialize the instance field (cell).  It will
 	 * also set the layout for the frame to an 8 by 8 grid layout.  Then
@@ -24,8 +27,32 @@ public class CheckerBoard extends JFrame {
 		setLayout(new GridLayout(8, 8));
 		
 		// for loop to call makeButton 64 times
-		for(int i = 1; i <= 64; i++){
+		for(int i = 0; i < 64; i++){
 			makeButton(i);
+		}
+		setCheckerboard(Color.WHITE);
+	}
+	
+	public void setCheckerboard(Color initColor){
+		currentColor = initColor;
+		skipColorSwitch = false;
+		for(JButton i : cell){
+			int cellNum = Integer.parseInt(i.getText());
+			if((cellNum + 1) % 8 == 0){
+				skipColorSwitch = true;
+			}
+			if(!skipColorSwitch){
+				i.setBackground(currentColor);
+				if(currentColor == Color.WHITE){
+					currentColor = Color.RED;
+				} else if(currentColor == Color.RED){
+					currentColor = Color.WHITE;
+				}
+			} else {
+				i.setBackground(currentColor);
+				skipColorSwitch = false;
+				System.out.println(cellNum);
+			}
 		}
 	}
 
@@ -34,26 +61,11 @@ public class CheckerBoard extends JFrame {
 	 * list.  The method also contains an inner class that implements ActionListener.
 	 * @param cellNum is the number of the button
 	 */
-	
-	private boolean whiteAdd = true;
 	public void makeButton(final int cellNum)
 	{
-		JButton button = new JButton("" + (cellNum - 1)); //teehee
-		add(button);   // add the button to the next cell in the grid
-		if(whiteAdd){
-			button.setBackground(Color.WHITE);
-			whiteAdd = false;
-			if(cellNum % 8 == 0){
-				whiteAdd = true;
-			}
-		} else {
-			button.setBackground(Color.RED);
-			whiteAdd = true;
-			if(cellNum % 8 == 0){
-				whiteAdd = false;
-			}
-		}
+		JButton button = new JButton("" + (cellNum)); //teehee
 		
+		add(button);   // add the button to the next cell in the grid
 		cell.add(button);
 		
 		
@@ -68,7 +80,16 @@ public class CheckerBoard extends JFrame {
 			 */
 			public void actionPerformed(ActionEvent event)
 			{
-				cellNum 
+				int index = Integer.parseInt(event.getActionCommand());
+				JButton tempButton = cell.get(index);
+				if(tempButton.getBackground() != Color.RED){
+					if(cell.get(0).getBackground() == Color.WHITE){
+						setCheckerboard(Color.RED);
+					} else if (cell.get(0).getBackground() == Color.RED){
+						setCheckerboard(Color.WHITE);
+					}
+					
+				}
 			}
 		}
 		
