@@ -3,7 +3,7 @@ package com.debashish.student;
 public class GradStudent extends Student {
 	public GradStudent(int id)
 	{
-		... // initialize the instance field using the parameter
+		this.gradID = id; // initialize the instance field using the parameter
 	}
 
 	/**
@@ -11,7 +11,14 @@ public class GradStudent extends Student {
 	 * getTestAverage method to find the average grade. Then set the grade.
 	 */
 	public void computeGrade() {
-		// grade will be "pass with distinction" when the test average is 90 or
+		int avg = getTestAverage();
+		if(avg >= 90){
+			grade = "pass with distinction";// grade will be "pass with distinction" when the test average is 90 or
+		} else if(avg >= 75){
+			grade = "pass";
+		} else {
+			grade = "fail";
+		}
 		// above
 		// grade will be "pass" when the test average is 75 to 89
 		// grade will be "fail" when the test average is below 75
@@ -23,8 +30,13 @@ public class GradStudent extends Student {
 	 * plus the grad ID.
 	 */
 	public String toString() {
-		// override the toString method of the base class so that the grad ID is
-		// also printed
+		String output = "ID: " + gradID + "\tScores:";
+		for(int i = 0; i < tests.size(); i++){
+			output += " " + tests.get(i);
+		}
+		output += "\n\tAverage: " + getTestAverage();
+		output += "\n\tGrade: " + grade;
+		return output;
 	}
 
 	private int gradID;
